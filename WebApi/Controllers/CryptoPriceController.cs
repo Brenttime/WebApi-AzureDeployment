@@ -60,10 +60,11 @@ namespace WebApi.Controllers
         /// <summary>
         /// Get the price of a ticker
         /// </summary>
+        /// <param name="ticker">name of a ticker to get a price</param>
         /// <returns>the last price of a ticker</returns>
         [HttpGet]
         [Route("{ticker}")]
-        public async Task<dynamic> GetEtheruemPriceAsync(string ticker)
+        public async Task<dynamic> GetTickerPriceAsync(string ticker)
         {
             var result = await this.webClient.GetAsync($"{this.cryptoConfig.Value.TickerRequestUrl}/{ticker}-{this.cryptoConfig.Value.Currency}/buy");
             try
