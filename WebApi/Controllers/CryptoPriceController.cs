@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -43,9 +44,9 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Get the price of bitcoin
+        /// Get the price of ethereum
         /// </summary>
-        /// <returns>the last price of bitcoin</returns>
+        /// <returns>the last price of ethereum</returns>
         [HttpGet]
         [Route("eth")]
         public async Task<dynamic> GetEtheruemPriceAsync()
@@ -54,7 +55,26 @@ namespace WebApi.Controllers
             var pricesPerCurrency =
                JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
             return pricesPerCurrency;
-            
+        }
+
+        /// <summary>
+        /// Get the price of a ticker
+        /// </summary>
+        /// <returns>the last price of a ticker</returns>
+        [HttpGet]
+        [Route("{ticker}")]
+        public async Task<dynamic> GetEtheruemPriceAsync(string ticker)
+        {
+            var result = await this.webClient.GetAsync($"{this.cryptoConfig.Value.TickerRequestUrl}/{ticker}-{this.cryptoConfig.Value.Currency}/buy");
+            try
+            {
+               return JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
+            }
+            catch(Exception e)
+            {
+                // Add Exception Logging
+                return String.Empty;
+            }
         }
     }
 }
