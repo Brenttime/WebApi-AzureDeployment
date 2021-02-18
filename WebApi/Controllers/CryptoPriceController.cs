@@ -41,5 +41,20 @@ namespace WebApi.Controllers
             var price = pricesPerCurrency[this.cryptoConfig.Value.Currency][this.cryptoConfig.Value.TimeSelection];
             return price;
         }
+
+        /// <summary>
+        /// Get the price of bitcoin
+        /// </summary>
+        /// <returns>the last price of bitcoin</returns>
+        [HttpGet]
+        [Route("eth")]
+        public async Task<dynamic> GetEtheruemPriceAsync()
+        {
+            var result = await this.webClient.GetAsync($"{this.cryptoConfig.Value.TickerRequestUrl}/eth-{this.cryptoConfig.Value.Currency}/buy");
+            var pricesPerCurrency =
+               JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
+            return pricesPerCurrency;
+            
+        }
     }
 }

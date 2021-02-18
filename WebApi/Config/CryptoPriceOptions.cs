@@ -5,5 +5,6 @@
         public string IndexReferenceUrl { get; set; }
         public string Currency { get; set; }
         public string TimeSelection { get; set; }
+        public string TickerRequestUrl { get; set; }
     }
 }
