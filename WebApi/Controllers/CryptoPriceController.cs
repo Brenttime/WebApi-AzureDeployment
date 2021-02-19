@@ -34,12 +34,12 @@ namespace WebApi.Controllers
         /// <returns>the last price of bitcoin</returns>
         [HttpGet]
         [Route("btc")]
-        public async Task<JToken> GetBitCoinPriceAsync()
+        public async Task<double> GetBitCoinPriceAsync()
         {
             var result = await this.webClient.GetAsync(this.cryptoConfig.Value.IndexReferenceUrl);
             Dictionary<string, JObject> pricesPerCurrency = 
                 JsonConvert.DeserializeObject<Dictionary<string, JObject>>(await result.Content.ReadAsStringAsync());
-            var price = pricesPerCurrency[this.cryptoConfig.Value.Currency][this.cryptoConfig.Value.TimeSelection];
+            var price = (double)pricesPerCurrency[this.cryptoConfig.Value.Currency][this.cryptoConfig.Value.TimeSelection];
             return price;
         }
 
@@ -49,11 +49,11 @@ namespace WebApi.Controllers
         /// <returns>the last price of ethereum</returns>
         [HttpGet]
         [Route("eth")]
-        public async Task<dynamic> GetEtheruemPriceAsync()
+        public async Task<double> GetEtheruemPriceAsync()
         {
             var result = await this.webClient.GetAsync($"{this.cryptoConfig.Value.TickerRequestUrl}/eth-{this.cryptoConfig.Value.Currency}/buy");
             var pricesPerCurrency =
-               JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
+               (double)JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
             return pricesPerCurrency;
         }
 
@@ -63,18 +63,18 @@ namespace WebApi.Controllers
         /// <param name="ticker">name of a ticker to get a price</param>
         /// <returns>the last price of a ticker</returns>
         [HttpGet]
-        [Route("{ticker}")]
-        public async Task<dynamic> GetTickerPriceAsync(string ticker)
+        [Route("ticker/{ticker}")]
+        public async Task<double> GetTickerPriceAsync(string ticker)
         {
             var result = await this.webClient.GetAsync($"{this.cryptoConfig.Value.TickerRequestUrl}/{ticker}-{this.cryptoConfig.Value.Currency}/buy");
             try
             {
-               return JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
+               return (double)JsonConvert.DeserializeObject<JObject>(await result.Content.ReadAsStringAsync())["data"]["amount"];
             }
             catch(Exception e)
             {
                 // Add Exception Logging
-                return String.Empty;
+                return -1;
             }
         }
     }
