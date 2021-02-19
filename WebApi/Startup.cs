@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Ninject.Activation;
 using WebApi.Config;
+using WebApi.TwilioAddon;
 
 namespace WebApi
 {
@@ -34,6 +35,9 @@ namespace WebApi
 
             services.AddSingleton<HttpClient>();
             services.Configure<CryptoPriceOptions>(this.Configuration.GetSection("CryptoConfig"));
+            
+            var twilioMessenger = new TwiText(Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"), Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN"));
+            twilioMessenger.Message();
 
             services.AddSwaggerGen();
         }
