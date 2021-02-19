@@ -20,7 +20,7 @@ namespace WebApi.TwilioAddon
 
         public void Message()
         {
-            List<string> numbers = new List<string>(new string[] { "+16107643555", "+14843633620", "+17179654573" });
+            List<string> numbers = new List<string>(new string[] {Environment.GetEnvironmentVariable("Joe_Number"), Environment.GetEnvironmentVariable("Zach_Number"), Environment.GetEnvironmentVariable("Brent_Number")});
             MessageResource message = null;
             foreach (var number in numbers) {
                    message = MessageResource.Create(
